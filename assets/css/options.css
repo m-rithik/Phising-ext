@@ -1,0 +1,130 @@
+body.options {
+  min-height: 100vh;
+}
+
+.options .hero {
+  min-height: 90vh;
+}
+
+.hero__stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin-top: 32px;
+}
+
+.stat-card {
+  border: 1px solid var(--ink);
+  padding: 18px;
+  background: rgba(255, 255, 255, 0.6);
+  display: grid;
+  gap: 6px;
+}
+
+.stat-card span {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-weight: 600;
+}
+
+.plugin-section {
+  display: grid;
+  gap: 32px;
+}
+
+.plugin-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 24px;
+}
+
+.plugin-card {
+  border: 1px solid var(--ink);
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.7);
+  display: grid;
+  gap: 12px;
+  transition: transform 0.3s var(--ease-out), box-shadow 0.3s var(--ease-out);
+}
+
+.plugin-card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 30px 60px rgba(30, 30, 30, 0.15);
+}
+
+.plugin-card__title {
+  font-family: "Clash Display", "Arial Black", sans-serif;
+  text-transform: uppercase;
+  font-size: 20px;
+  transition: color 0.3s ease-out;
+}
+
+.plugin-card:hover .plugin-card__title {
+  color: var(--accent-soft);
+}
+
+.plugin-card__desc {
+  font-size: 14px;
+}
+
+.plugin-card__meta {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-weight: 600;
+}
+
+.plugin-card__controls {
+  display: grid;
+  gap: 12px;
+}
+
+.campaign {
+  background: var(--panel-strong);
+  padding: 64px 32px;
+}
+
+.campaign__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 24px;
+  align-items: start;
+}
+
+.campaign__headline {
+  font-size: clamp(2.4rem, 7vw, 4.6rem);
+  line-height: 0.9;
+}
+
+.campaign__stack {
+  display: grid;
+  gap: 16px;
+}
+
+.link-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--ink-soft);
+  padding-top: 12px;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-weight: 600;
+}
+
+.settings-grid {
+  display: grid;
+  gap: 16px;
+}
+
+.inline-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.options .footer {
+  margin-top: 40px;
+}

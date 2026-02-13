@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Vernacular Phishing Shield - Control Room</title>
+    <link rel="stylesheet" href="../assets/css/base.css" />
+    <link rel="stylesheet" href="../assets/css/options.css" />
+  </head>
+  <body class="options page">
+    <div class="bg">
+      <div class="blob blob--a"></div>
+      <div class="blob blob--b"></div>
+      <div class="blob blob--c"></div>
+    </div>
+
+    <header class="nav">
+      <div class="nav__logo">PHISHING SHIELD</div>
+      <nav class="nav__links">
+        <a href="#overview">Overview</a>
+        <a href="#plugins">Plugins</a>
+        <a href="#ml">ML Core</a>
+        <a href="#telemetry">Telemetry</a>
+      </nav>
+      <div class="nav__icons">
+        <div class="icon-circle" aria-hidden="true">
+          <svg
+            viewBox="0 0 24 24"
+            width="18"
+            height="18"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <circle cx="11" cy="11" r="7"></circle>
+            <line x1="16.65" y1="16.65" x2="21" y2="21"></line>
+          </svg>
+        </div>
+        <div class="icon-circle" aria-hidden="true">
+          <svg
+            viewBox="0 0 24 24"
+            width="18"
+            height="18"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M6 7h12l-1 13H7L6 7z"></path>
+            <path d="M9 7V5a3 3 0 0 1 6 0v2"></path>
+          </svg>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="section hero animate-in" id="overview">
+        <h1 class="hero__title">
+          Phishing
+          <span>Detection Studio</span>
+        </h1>
+        <p class="hero__copy">
+          Configure the multilingual ML stack, tune plugin thresholds, and
+          orchestrate vernacular defenses across every surface.
+        </p>
+        <div class="hero__cta">
+          <button class="btn btn--primary" id="saveSettings">
+            <span>Save settings</span>
+          </button>
+          <button class="btn btn--ghost" id="testConnection">
+            Test ML connection
+          </button>
+        </div>
+        <div class="hero__stats">
+          <div class="stat-card">
+            <span>Languages</span>
+            <strong id="langCount">0</strong>
+            <p>Tracked vernacular and code-mix profiles.</p>
+          </div>
+          <div class="stat-card">
+            <span>Plugins</span>
+            <strong id="pluginCount">0</strong>
+            <p>Enabled detectors and heuristics.</p>
+          </div>
+          <div class="stat-card">
+            <span>Last Scan</span>
+            <strong id="lastScan">--</strong>
+            <p>Current phishing risk signal.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="divider animate-in" id="plugins" style="--delay: 0.06s">
+        <h2 class="divider__title">Plugin Ecosystem</h2>
+      </section>
+
+      <section class="section plugin-section animate-in" style="--delay: 0.12s">
+        <div class="status-row">
+          <div>
+            <div class="meta">Active Plugins</div>
+            <p>Toggle, tune, or drop in new detectors.</p>
+          </div>
+          <div class="inline-actions">
+            <label class="btn btn--ghost" for="pluginImport">
+              Import plugin JSON
+            </label>
+            <input id="pluginImport" type="file" accept="application/json" hidden />
+            <button class="btn btn--ghost" id="resetPlugins">Reset defaults</button>
+          </div>
+        </div>
+        <div class="plugin-grid" id="pluginGrid"></div>
+      </section>
+
+      <section class="campaign animate-in" id="ml" style="--delay: 0.16s">
+        <div class="campaign__grid">
+          <div>
+            <h2 class="campaign__headline">ML Core Routing</h2>
+            <p>
+              Point the extension to your vernacular phishing model. The ML
+              core receives raw text, link metadata, and plugin settings.
+            </p>
+          </div>
+          <div class="campaign__stack">
+            <div class="settings-grid">
+              <div class="field">
+                <label for="mlBaseUrl">ML Base URL</label>
+                <input
+                  id="mlBaseUrl"
+                  type="text"
+                  placeholder="http://localhost:8000"
+                />
+              </div>
+              <div class="field">
+                <label for="mlPath">Predict Path</label>
+                <input id="mlPath" type="text" placeholder="/predict" />
+              </div>
+              <div class="field">
+                <label for="mlHealthPath">Health Path</label>
+                <input id="mlHealthPath" type="text" placeholder="/health" />
+              </div>
+              <div class="field">
+                <label for="apiKey">API Key (optional)</label>
+                <input id="apiKey" type="password" placeholder="Bearer token" />
+              </div>
+              <div class="field">
+                <label for="globalThreshold">Global Risk Threshold</label>
+                <input
+                  id="globalThreshold"
+                  type="range"
+                  min="0.4"
+                  max="0.95"
+                  step="0.05"
+                />
+                <div class="meta" id="globalThresholdValue">0.7</div>
+              </div>
+              <div class="status-row">
+                <span class="meta">Auto Scan</span>
+                <label class="switch">
+                  <input type="checkbox" id="autoScan" />
+                  <span></span>
+                </label>
+              </div>
+              <div class="status-row">
+                <span class="meta">Deep Scan</span>
+                <label class="switch">
+                  <input type="checkbox" id="deepScan" />
+                  <span></span>
+                </label>
+              </div>
+            </div>
+            <div class="link-row">
+              <span>Connection</span>
+              <span id="mlStatus">Offline</span>
+            </div>
+            <div class="link-row">
+              <span>Latency</span>
+              <span id="mlLatency">--</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section animate-in" id="telemetry" style="--delay: 0.2s">
+        <div class="grid grid--two">
+          <div class="card">
+            <div class="meta">Telemetry</div>
+            <h3>Signal Archive</h3>
+            <p>
+              Store local scan history for research and evaluation. Nothing
+              leaves the device unless you enable uploads.
+            </p>
+            <div class="status-row">
+              <span class="meta">Store History</span>
+              <label class="switch">
+                <input type="checkbox" id="storeHistory" />
+                <span></span>
+              </label>
+            </div>
+          </div>
+          <div class="card">
+            <div class="meta">Integrations</div>
+            <h3>Plugin Dev Kit</h3>
+            <p>
+              Plugins can include custom model routes, heuristics, and language
+              packs. Import JSON to extend.
+            </p>
+            <div class="inline-actions">
+              <button class="btn btn--ghost" id="exportConfig">
+                Export config
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="footer__grid">
+        <div>
+          <div class="nav__logo">VPS</div>
+          <p>Phishing detection for vernacular India.</p>
+        </div>
+        <div>
+          <div class="meta">Coverage</div>
+          <p>10+ regional language pipelines.</p>
+        </div>
+        <div>
+          <div class="meta">Pipeline</div>
+          <p>ML + heuristic fallback.</p>
+        </div>
+      </div>
+      <div class="footer__stamp">2026</div>
+    </footer>
+
+    <script type="module" src="../src/options.js"></script>
+  </body>
+</html>

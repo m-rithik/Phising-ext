@@ -1,0 +1,56 @@
+{
+  "manifest_version": 3,
+  "name": "Vernacular Phishing Shield",
+  "version": "0.1.0",
+  "description": "Detect phishing in regional Indian languages and code-mixed text with an ML-backed plugin pipeline.",
+  "action": {
+    "default_title": "Phishing Shield",
+    "default_popup": "ui/popup.html"
+  },
+  "options_ui": {
+    "page": "ui/options.html",
+    "open_in_tab": true
+  },
+  "background": {
+    "service_worker": "src/background.js",
+    "type": "module"
+  },
+  "permissions": [
+    "storage",
+    "activeTab",
+    "scripting",
+    "alarms"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "src/contentScript.js"
+      ],
+      "css": [
+        "assets/css/content.css"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "assets/css/*",
+        "assets/icons/*",
+        "plugins/registry.json"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
+    }
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'; style-src 'self' 'unsafe-inline' https://api.fontshare.com; font-src 'self' https://api.fontshare.com; img-src 'self' data: https:; connect-src 'self' http://localhost:8000 http://127.0.0.1:8000 https:;"
+  }
+}

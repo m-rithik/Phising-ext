@@ -1,0 +1,51 @@
+.phish-shield-banner {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 2147483647;
+  background: #1e1e1e;
+  color: #e4e2dd;
+  border: 2px solid #db4a2b;
+  padding: 16px 18px;
+  max-width: 320px;
+  font-family: "Satoshi", "Inter", Arial, sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  box-shadow: 0 20px 40px rgba(30, 30, 30, 0.35);
+  animation: phish-slide-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.phish-shield-banner strong {
+  display: block;
+  font-family: "Clash Display", "Arial Black", sans-serif;
+  font-size: 18px;
+  margin-bottom: 8px;
+}
+
+.phish-shield-banner p {
+  margin: 0 0 12px;
+  font-size: 12px;
+  letter-spacing: 0.12em;
+}
+
+.phish-shield-banner button {
+  border: 1px solid #e4e2dd;
+  background: transparent;
+  color: inherit;
+  padding: 8px 12px;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 600;
+}
+
+@keyframes phish-slide-up {
+  from {
+    transform: translateY(18px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}

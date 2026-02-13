@@ -1,0 +1,250 @@
+{
+  "version": 1,
+  "languages": [
+    "Hindi",
+    "Bengali",
+    "Tamil",
+    "Telugu",
+    "Marathi",
+    "Kannada",
+    "Malayalam",
+    "Gujarati",
+    "Punjabi",
+    "Urdu",
+    "Hinglish",
+    "Code-mix"
+  ],
+  "plugins": [
+    {
+      "id": "lang-id",
+      "name": "Language ID",
+      "category": "Language",
+      "description": "Identify regional Indian languages and code-mix patterns before scoring.",
+      "endpoint": "/detect/language",
+      "inputs": ["page_text"],
+      "defaultEnabled": true,
+      "settings": [
+        {
+          "id": "threshold",
+          "label": "Confidence Threshold",
+          "type": "range",
+          "min": 0.5,
+          "max": 0.95,
+          "step": 0.05,
+          "value": 0.7
+        }
+      ]
+    },
+    {
+      "id": "code-mix",
+      "name": "Code-Mix Mapper",
+      "category": "Language",
+      "description": "Detect code-mixed segments that hide phishing intent across scripts.",
+      "endpoint": "/detect/code-mix",
+      "inputs": ["page_text"],
+      "defaultEnabled": true,
+      "settings": [
+        {
+          "id": "aggressive",
+          "label": "Aggressive Mode",
+          "type": "toggle",
+          "value": false
+        }
+      ]
+    },
+    {
+      "id": "transliteration-normalizer",
+      "name": "Transliteration Normalizer",
+      "category": "Language",
+      "description": "Normalize Romanized Hindi, Tamil, and Telugu to improve intent scoring.",
+      "endpoint": "/normalize/transliteration",
+      "inputs": ["page_text"],
+      "defaultEnabled": true,
+      "settings": [
+        {
+          "id": "rewriteLevel",
+          "label": "Rewrite Level",
+          "type": "select",
+          "options": ["light", "balanced", "heavy"],
+          "value": "balanced"
+        }
+      ]
+    },
+    {
+      "id": "url-risk",
+      "name": "URL Risk Analyzer",
+      "category": "Links",
+      "description": "Analyze shorteners, redirects, and unicode spoofing in URLs.",
+      "endpoint": "/detect/url-risk",
+      "inputs": ["links"],
+      "defaultEnabled": true,
+      "settings": [
+        {
+          "id": "shortenerBoost",
+          "label": "Shortener Boost",
+          "type": "range",
+          "min": 0,
+          "max": 0.4,
+          "step": 0.05,
+          "value": 0.2
+        }
+      ]
+    },
+    {
+      "id": "credential-harvest",
+      "name": "Credential Harvest Intent",
+      "category": "Intent",
+      "description": "Detects OTP, password, and account takeover language.",
+      "endpoint": "/predict/intent/credential",
+      "inputs": ["page_text", "forms"],
+      "defaultEnabled": true,
+      "settings": [
+        {
+          "id": "threshold",
+          "label": "Risk Threshold",
+          "type": "range",
+          "min": 0.6,
+          "max": 0.95,
+          "step": 0.05,
+          "value": 0.8
+        }
+      ]
+    },
+    {
+      "id": "upi-guard",
+      "name": "UPI Scam Guard",
+      "category": "Payments",
+      "description": "Flags UPI, wallet, and refund bait in regional languages.",
+      "endpoint": "/predict/intent/upi",
+      "inputs": ["page_text"],
+      "defaultEnabled": true,
+      "settings": [
+        {
+          "id": "threshold",
+          "label": "Risk Threshold",
+          "type": "range",
+          "min": 0.6,
+          "max": 0.95,
+          "step": 0.05,
+          "value": 0.75
+        }
+      ]
+    },
+    {
+      "id": "bank-brand",
+      "name": "Brand Impersonation",
+      "category": "Brand",
+      "description": "Detects bank and government brand spoofing in content and links.",
+      "endpoint": "/predict/brand",
+      "inputs": ["page_text", "links"],
+      "defaultEnabled": true,
+      "settings": [
+        {
+          "id": "sensitivity",
+          "label": "Sensitivity",
+          "type": "select",
+          "options": ["low", "balanced", "high"],
+          "value": "balanced"
+        }
+      ]
+    },
+    {
+      "id": "sms-lure",
+      "name": "SMS and WhatsApp Lure",
+      "category": "Channels",
+      "description": "Detects patterns typical of messaging-based phishing lures.",
+      "endpoint": "/predict/channel/sms",
+      "inputs": ["page_text"],
+      "defaultEnabled": true,
+      "settings": [
+        {
+          "id": "threshold",
+          "label": "Risk Threshold",
+          "type": "range",
+          "min": 0.5,
+          "max": 0.9,
+          "step": 0.05,
+          "value": 0.7
+        }
+      ]
+    },
+    {
+      "id": "form-siphon",
+      "name": "Form Siphon Guard",
+      "category": "Forms",
+      "description": "Detects suspicious forms requesting OTP, PIN, or banking data.",
+      "endpoint": "/detect/form-risk",
+      "inputs": ["forms"],
+      "defaultEnabled": true,
+      "settings": [
+        {
+          "id": "fieldLimit",
+          "label": "Sensitive Field Limit",
+          "type": "range",
+          "min": 1,
+          "max": 6,
+          "step": 1,
+          "value": 3
+        }
+      ]
+    },
+    {
+      "id": "qr-phish",
+      "name": "QR Phish Scanner",
+      "category": "Links",
+      "description": "Flags QR payment and login traps embedded in pages.",
+      "endpoint": "/detect/qr",
+      "inputs": ["images"],
+      "defaultEnabled": false,
+      "settings": [
+        {
+          "id": "scanDensity",
+          "label": "Scan Density",
+          "type": "select",
+          "options": ["light", "balanced", "deep"],
+          "value": "balanced"
+        }
+      ]
+    },
+    {
+      "id": "attachment-risk",
+      "name": "Attachment Risk",
+      "category": "Files",
+      "description": "Detects suspicious attachment callouts or download bait.",
+      "endpoint": "/predict/attachment",
+      "inputs": ["page_text", "links"],
+      "defaultEnabled": false,
+      "settings": [
+        {
+          "id": "threshold",
+          "label": "Risk Threshold",
+          "type": "range",
+          "min": 0.5,
+          "max": 0.9,
+          "step": 0.05,
+          "value": 0.7
+        }
+      ]
+    },
+    {
+      "id": "voice-note",
+      "name": "Voice Note Transcripts",
+      "category": "Audio",
+      "description": "Analyzes transcript hints for voice phishing or deepfake prompts.",
+      "endpoint": "/predict/voice",
+      "inputs": ["page_text"],
+      "defaultEnabled": false,
+      "settings": [
+        {
+          "id": "threshold",
+          "label": "Risk Threshold",
+          "type": "range",
+          "min": 0.5,
+          "max": 0.9,
+          "step": 0.05,
+          "value": 0.7
+        }
+      ]
+    }
+  ]
+}
