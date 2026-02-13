@@ -4,9 +4,9 @@
   --base: #e4e2dd;
   --ink: #1e1e1e;
   --muted: #4b4b4b;
-  --accent: #db4a2b;
-  --accent-warm: #f8a348;
-  --accent-soft: #ff89a9;
+  --accent: #1f6bff;
+  --accent-warm: #3aa6ff;
+  --accent-soft: #8fd3ff;
   --ink-soft: rgba(30, 30, 30, 0.18);
   --panel: #f1efe9;
   --panel-strong: #d9d6d0;
@@ -249,6 +249,13 @@ textarea {
   transition: color 0.3s ease-out, border-color 0.3s ease-out;
 }
 
+button:disabled,
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
 .btn--primary {
   background: var(--ink);
   color: var(--base);
@@ -275,7 +282,7 @@ textarea {
 }
 
 .btn--primary:hover span {
-  color: var(--accent);
+  color: var(--ink);
 }
 
 .btn--ghost {

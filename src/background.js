@@ -26,10 +26,10 @@ function updateBadge(result) {
   const score = result.riskScore || 0;
   if (score >= result.threshold) {
     chrome.action.setBadgeText({ text: "ALRT" });
-    chrome.action.setBadgeBackgroundColor({ color: "#DB4A2B" });
+    chrome.action.setBadgeBackgroundColor({ color: "#1F6BFF" });
   } else if (score >= 0.5) {
     chrome.action.setBadgeText({ text: "CHK" });
-    chrome.action.setBadgeBackgroundColor({ color: "#F8A348" });
+    chrome.action.setBadgeBackgroundColor({ color: "#3AA6FF" });
   } else {
     chrome.action.setBadgeText({ text: "" });
   }

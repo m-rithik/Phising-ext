@@ -5,7 +5,7 @@
   z-index: 2147483647;
   background: #1e1e1e;
   color: #e4e2dd;
-  border: 2px solid #db4a2b;
+  border: 2px solid #1f6bff;
   padding: 16px 18px;
   max-width: 320px;
   font-family: "Satoshi", "Inter", Arial, sans-serif;
@@ -13,6 +13,14 @@
   letter-spacing: 0.08em;
   box-shadow: 0 20px 40px rgba(30, 30, 30, 0.35);
   animation: phish-slide-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.phish-shield-banner[data-level="low"] {
+  border-color: #3aa6ff;
+}
+
+.phish-shield-banner[data-level="high"] {
+  border-color: #1f6bff;
 }
 
 .phish-shield-banner strong {

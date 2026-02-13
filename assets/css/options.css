@@ -61,7 +61,7 @@ body.options {
 }
 
 .plugin-card:hover .plugin-card__title {
-  color: var(--accent-soft);
+  color: var(--ink);
 }
 
 .plugin-card__desc {

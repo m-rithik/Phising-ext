@@ -5,9 +5,11 @@
     globalThreshold: 0.7
   };
   const MAX_TEXT = 6000;
-  const SCAN_COOLDOWN = 5000;
+  const SCAN_COOLDOWN = 1200;
   let lastScanAt = 0;
   let bannerEl = null;
+  let bannerTimer = null;
+  let lastUrl = window.location.href;
 
   function getSettings() {
     return new Promise((resolve) => {
@@ -50,7 +52,7 @@
       bannerEl = document.createElement("div");
       bannerEl.className = "phish-shield-banner";
       bannerEl.innerHTML = `
-        <strong>Phishing Alert</strong>
+        <strong id="phishBannerTitle">Scan complete</strong>
         <p id="phishBannerCopy"></p>
         <button type="button" id="phishBannerDismiss">Dismiss</button>
       `;
@@ -62,10 +64,22 @@
           bannerEl = null;
         });
     }
+    if (bannerTimer) {
+      clearTimeout(bannerTimer);
+      bannerTimer = null;
+    }
+    const title = bannerEl.querySelector("#phishBannerTitle");
     const copy = bannerEl.querySelector("#phishBannerCopy");
-    copy.textContent = `Risk ${Math.round(
-      (result.riskScore || 0) * 100
-    )}% | ${result.label || "phishing detected"}`;
+    const scorePercent = Math.round((result.riskScore || 0) * 100);
+    const isHigh = result.riskScore >= result.threshold;
+    bannerEl.dataset.level = isHigh ? "high" : "low";
+    title.textContent = isHigh ? "Phishing alert" : "Scan complete";
+    copy.textContent = `Risk ${scorePercent}% | ${result.label || "analysis"}`;
+    if (!isHigh) {
+      bannerTimer = setTimeout(() => {
+        clearBanner();
+      }, 5000);
+    }
   }
 
   function clearBanner() {
@@ -86,12 +100,12 @@
     }
 
     const payload = {
-      text: collectText(),
+      text: settings.deepScan ? collectText() : "",
       url: window.location.href,
       title: document.title,
       lang: document.documentElement.lang || "",
-      links: collectLinks(),
-      forms: collectForms(),
+      links: settings.deepScan ? collectLinks() : [],
+      forms: settings.deepScan ? collectForms() : [],
       source: trigger
     };
 
@@ -99,13 +113,15 @@
       { type: "PHISHING_ANALYZE", payload },
       (result) => {
         if (!result) return;
-        if (result.riskScore >= result.threshold) {
-          showBanner(result);
-        } else {
-          clearBanner();
-        }
+        showBanner(result);
       }
     );
+  }
+
+  function handleUrlChange() {
+    if (window.location.href === lastUrl) return;
+    lastUrl = window.location.href;
+    runScan("navigation");
   }
 
   chrome.runtime.onMessage.addListener((message) => {
@@ -119,4 +135,20 @@
   } else {
     window.addEventListener("load", () => runScan("auto"), { once: true });
   }
+
+  const originalPushState = history.pushState;
+  history.pushState = function (...args) {
+    originalPushState.apply(this, args);
+    window.dispatchEvent(new Event("phish-url-change"));
+  };
+  const originalReplaceState = history.replaceState;
+  history.replaceState = function (...args) {
+    originalReplaceState.apply(this, args);
+    window.dispatchEvent(new Event("phish-url-change"));
+  };
+
+  window.addEventListener("phish-url-change", handleUrlChange);
+  window.addEventListener("popstate", handleUrlChange);
+  window.addEventListener("hashchange", handleUrlChange);
+  setInterval(handleUrlChange, 1000);
 })();

@@ -94,9 +94,12 @@ async function wireActions() {
   const modelStatus = document.getElementById("modelStatus");
   chrome.runtime.sendMessage({ type: "PHISHING_PING" }, (response) => {
     if (response?.ok) {
-      modelStatus.textContent = `Backend online (${response.latency})`;
+      modelStatus.textContent =
+        response.latency === "local"
+          ? "Local model active"
+          : `Backend online (${response.latency})`;
     } else {
-      modelStatus.textContent = "Backend offline";
+      modelStatus.textContent = "Model offline";
     }
   });
 }
