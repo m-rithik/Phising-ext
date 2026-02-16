@@ -134,12 +134,30 @@
                 <input id="mlPath" type="text" placeholder="/predict" />
               </div>
               <div class="field">
+                <label for="mlModelType">Model Type</label>
+                <select id="mlModelType">
+                  <option value="xgboost">XGBoost</option>
+                  <option value="ann">ANN (MLP)</option>
+                </select>
+              </div>
+              <div class="field">
                 <label for="mlHealthPath">Health Path</label>
-                <input id="mlHealthPath" type="text" placeholder="/health" />
+                <input id="mlHealthPath" type="text" placeholder="/" />
               </div>
               <div class="field">
                 <label for="apiKey">API Key (optional)</label>
                 <input id="apiKey" type="password" placeholder="Bearer token" />
+              </div>
+              <div class="field">
+                <label for="trustedDomains">Trusted Domains</label>
+                <textarea
+                  id="trustedDomains"
+                  rows="3"
+                  placeholder="example.edu, college.ac.in"
+                ></textarea>
+                <div class="meta">
+                  Comma or newline separated domains. These will be treated as safe.
+                </div>
               </div>
               <div class="field">
                 <label for="globalThreshold">Global Risk Threshold</label>
@@ -194,6 +212,32 @@
                 <input type="checkbox" id="storeHistory" />
                 <span></span>
               </label>
+            </div>
+          </div>
+          <div class="card">
+            <div class="meta">Ledger</div>
+            <h3>Blockchain Factor</h3>
+            <p>
+              Keep a local hash-chain ledger of reported phishing domains. The
+              model boosts risk if a domain has prior reports.
+            </p>
+            <div class="status-row">
+              <span class="meta">Enable Ledger</span>
+              <label class="switch">
+                <input type="checkbox" id="ledgerEnabled" />
+                <span></span>
+              </label>
+            </div>
+            <div class="field">
+              <label for="ledgerBoost">Ledger Boost</label>
+              <input
+                id="ledgerBoost"
+                type="range"
+                min="0.05"
+                max="0.4"
+                step="0.05"
+              />
+              <div class="meta" id="ledgerBoostValue">0.18</div>
             </div>
           </div>
           <div class="card">

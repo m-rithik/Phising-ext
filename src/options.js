@@ -47,12 +47,28 @@ async function hydrateSettings() {
   const settings = await getSettings();
   document.getElementById("mlBaseUrl").value = settings.mlBaseUrl || "";
   document.getElementById("mlPath").value = settings.mlPath || "/predict";
+  document.getElementById("mlModelType").value =
+    settings.mlModelType || "xgboost";
   document.getElementById("mlHealthPath").value =
-    settings.mlHealthPath || "/health";
+    settings.mlHealthPath || "/";
   document.getElementById("apiKey").value = settings.apiKey || "";
+  document.getElementById("trustedDomains").value = Array.isArray(
+    settings.trustedDomains
+  )
+    ? settings.trustedDomains.join("\n")
+    : "";
   document.getElementById("autoScan").checked = settings.autoScan;
   document.getElementById("deepScan").checked = settings.deepScan;
   document.getElementById("storeHistory").checked = settings.storeHistory;
+  document.getElementById("ledgerEnabled").checked = settings.ledgerEnabled;
+
+  const ledgerBoost = document.getElementById("ledgerBoost");
+  const ledgerBoostValue = document.getElementById("ledgerBoostValue");
+  ledgerBoost.value = settings.ledgerBoost;
+  ledgerBoostValue.textContent = settings.ledgerBoost;
+  ledgerBoost.addEventListener("input", () => {
+    ledgerBoostValue.textContent = ledgerBoost.value;
+  });
 
   const threshold = document.getElementById("globalThreshold");
   const thresholdValue = document.getElementById("globalThresholdValue");
@@ -67,14 +83,22 @@ async function saveSettings() {
   const updated = {
     mlBaseUrl: document.getElementById("mlBaseUrl").value.trim(),
     mlPath: document.getElementById("mlPath").value.trim() || "/predict",
+    mlModelType: document.getElementById("mlModelType").value || "xgboost",
     mlHealthPath:
-      document.getElementById("mlHealthPath").value.trim() || "/health",
+      document.getElementById("mlHealthPath").value.trim() || "/",
     apiKey: document.getElementById("apiKey").value.trim(),
     autoScan: document.getElementById("autoScan").checked,
     deepScan: document.getElementById("deepScan").checked,
     storeHistory: document.getElementById("storeHistory").checked,
-    globalThreshold: Number(document.getElementById("globalThreshold").value)
+    globalThreshold: Number(document.getElementById("globalThreshold").value),
+    ledgerEnabled: document.getElementById("ledgerEnabled").checked,
+    ledgerBoost: Number(document.getElementById("ledgerBoost").value)
   };
+  const trustedRaw = document.getElementById("trustedDomains").value || "";
+  updated.trustedDomains = trustedRaw
+    .split(/[\n,]/)
+    .map((entry) => entry.trim().toLowerCase())
+    .filter(Boolean);
   await setSettings(updated);
 }
 

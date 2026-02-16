@@ -63,12 +63,20 @@
         <div class="risk-meter" id="riskMeter" style="--risk: 0.15">
           <span></span>
         </div>
-        <div class="status-row">
-          <span id="engineLabel">Engine: standby</span>
-          <span id="scanTime">Last scan: --</span>
+          <div class="status-row">
+            <span id="engineLabel">Engine: standby</span>
+            <span id="scanTime">Last scan: --</span>
+          </div>
+          <div class="status-row">
+            <span class="meta">URL Model</span>
+            <span class="meta" id="urlMetric">--</span>
+          </div>
+          <div class="status-row">
+            <span class="meta">Text Model</span>
+            <span class="meta" id="textMetric">--</span>
+          </div>
         </div>
-      </div>
-      <div class="status-card">
+        <div class="status-card">
         <div class="status-row">
           <span class="meta">Auto Scan</span>
           <label class="switch">
@@ -83,7 +91,20 @@
             <span></span>
           </label>
         </div>
-        <p>Auto scans run on every page. Deep scan sends more context.</p>
+          <p>Auto scans run on every page. Deep scan sends more context.</p>
+        </div>
+        <div class="status-card">
+          <div class="status-row">
+            <span class="meta">Ledger</span>
+            <span class="meta" id="ledgerCount">0 reports</span>
+          </div>
+          <p>
+            Local hash-chain ledger for reported phishing domains. This powers
+            the blockchain factor in scoring.
+          </p>
+          <button class="btn btn--ghost" id="ledgerReport">
+            Report this domain
+          </button>
         </div>
       </section>
 
@@ -116,7 +137,7 @@
       </div>
       <div>
         <div class="meta">Model</div>
-        <p id="modelStatus">Local model active</p>
+        <p id="modelStatus">Checking...</p>
       </div>
       <div>
         <div class="meta">Plugins</div>

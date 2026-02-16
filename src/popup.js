@@ -14,6 +14,10 @@ import {
 async function updateStatus() {
   const lastScan = await getLastScan();
   if (!lastScan) {
+    const ledgerCount = document.getElementById("ledgerCount");
+    if (ledgerCount) {
+      ledgerCount.textContent = "0 reports";
+    }
     return;
   }
   const riskMeter = document.getElementById("riskMeter");
@@ -21,12 +25,35 @@ async function updateStatus() {
   const scanTime = document.getElementById("scanTime");
   const engineLabel = document.getElementById("engineLabel");
   const signalList = document.getElementById("signalList");
+  const ledgerCount = document.getElementById("ledgerCount");
+  const urlMetric = document.getElementById("urlMetric");
+  const textMetric = document.getElementById("textMetric");
 
   const score = Number(lastScan.riskScore || 0);
   riskMeter.style.setProperty("--risk", Math.min(score, 1));
   riskLabelEl.textContent = riskLabel(score);
   scanTime.textContent = `Last scan: ${formatTime(lastScan.at)}`;
   engineLabel.textContent = `Engine: ${lastScan.engine}`;
+  if (ledgerCount) {
+    const count = lastScan.ledgerCount || 0;
+    ledgerCount.textContent = `${count} report${count === 1 ? "" : "s"}`;
+  }
+  if (urlMetric) {
+    if (Number.isFinite(lastScan.urlScore)) {
+      const score = Math.round(lastScan.urlScore * 100);
+      urlMetric.textContent = `${score}% | ${lastScan.urlLabel || "URL model"}`;
+    } else {
+      urlMetric.textContent = "--";
+    }
+  }
+  if (textMetric) {
+    if (Number.isFinite(lastScan.textScore)) {
+      const score = Math.round(lastScan.textScore * 100);
+      textMetric.textContent = `${score}% | ${lastScan.textLabel || "Text model"}`;
+    } else {
+      textMetric.textContent = lastScan.textLabel || "Text model offline";
+    }
+  }
 
   signalList.innerHTML = "";
   if (lastScan.signals && lastScan.signals.length) {
@@ -99,9 +126,51 @@ async function wireActions() {
           ? "Local model active"
           : `Backend online (${response.latency})`;
     } else {
-      modelStatus.textContent = "Model offline";
+      modelStatus.textContent = "Model offline (local fallback)";
     }
   });
+
+  const [tab] = await chrome.tabs.query({
+    active: true,
+    currentWindow: true
+  });
+  if (tab?.url) {
+    chrome.runtime.sendMessage(
+      { type: "LEDGER_STATUS", payload: { url: tab.url } },
+      (response) => {
+        const ledgerCount = document.getElementById("ledgerCount");
+        if (!ledgerCount || !response?.ok) return;
+        const count = response.info?.count || 0;
+        ledgerCount.textContent = `${count} report${count === 1 ? "" : "s"}`;
+      }
+    );
+  }
+
+  const ledgerReport = document.getElementById("ledgerReport");
+  if (ledgerReport) {
+    ledgerReport.addEventListener("click", async () => {
+      const [tab] = await chrome.tabs.query({
+        active: true,
+        currentWindow: true
+      });
+      if (!tab?.url) return;
+      ledgerReport.textContent = "Reporting...";
+      chrome.runtime.sendMessage(
+        { type: "LEDGER_REPORT", payload: { url: tab.url } },
+        (response) => {
+          if (response?.ok) {
+            ledgerReport.textContent = "Reported";
+          } else {
+            ledgerReport.textContent = "Report failed";
+          }
+          setTimeout(() => {
+            ledgerReport.textContent = "Report this domain";
+          }, 2000);
+          updateStatus();
+        }
+      );
+    });
+  }
 }
 
 async function init() {

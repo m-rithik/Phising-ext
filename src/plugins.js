@@ -11,12 +11,16 @@ export const STORAGE_KEYS = {
 export const DEFAULT_SETTINGS = {
   mlBaseUrl: "http://localhost:8000",
   mlPath: "/predict",
-  mlHealthPath: "/health",
+  mlHealthPath: "/",
+  mlModelType: "xgboost",
   apiKey: "",
   autoScan: true,
   deepScan: false,
   globalThreshold: 0.7,
-  storeHistory: false
+  storeHistory: false,
+  ledgerEnabled: true,
+  ledgerBoost: 0.18,
+  trustedDomains: []
 };
 
 export function storageGet(keys) {
